@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,400i,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"> 
      <link rel="stylesheet" href="style.css">
     <title>Weather Dashboard</title>
@@ -24,8 +26,12 @@
             <form id="user-form" class="card-body">
                 <label class="form-label" for="cityname">City</label>
                 <input name="cityname" id="cityname" type="text" autofocus="true" class="form-input" />
-                <button type="submit" class="btn">Get Weather</button>
+                <button type="submit" class="btn" id="search-button">Get Weather</button>
             </form>
+            <div class="history">
+                <ul>
+                </ul>
+            </div>
         </div>
 
         <div class="col-12 cold-md-8">
