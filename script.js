@@ -1,57 +1,66 @@
-var userFormEl = document.querySelector("#user-form");
-var cityNameInputEl = document.querySelector("#cityname");
-var weatherContainerEl = document.querySelector("#weather-container");
-var citySearchTerm = document.querySelector("#city-search-term");
+
+function getCityName() {
+    var cityName = document.querySelector("#cityName").value;
+    getWeatherData(cityName);
+    makeRow(cityName);
+}
+
+function makeRow(cityName) {
+    var liEl = document.createElement("li")
+    liEl.classList.add("list-group-item", "list-group-item-action");
+    var text = cityName;
+    liEl.textContent = text;
+    var historyEl = document.querySelector('.history');
+    console.log(event.target)
+    historyEl.onclick = function(){
+        console.log(event.target.tagName)
+        if (event.target.tagName === "li"){
+            getWeatherData(event.target.textContent)
+        }
+    }
+    historyEl.appendChild(liEl);
+};
 
 var getWeatherData = function(cityname) {
-    //format the weathermap api url
-    var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityname + "&appid=ed3ceecb82da99a626e9f6aef02e2dbb";
-    
-    //make a request to the URL
-    fetch(apiUrl).then(function(response) {
-    response.json().then(function(data) {
-        displayWeather(data, cityname)
-    });   
-  });
-};
+    fetch("https://api.openweathermap.org/data/2.5/weather?q=" + cityname + "&appid=ed3ceecb82da99a626e9f6aef02e2dbb&units=imperial")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
 
-var formSubmitHandler = function(event) {
-    event.preventDefault();
-    //get value from input element
-    var cityname = cityNameInputEl.value.trim();
+        //clear any old content
+        todayEl = document.querySelector("#today");
+        todayEl.textContent = " ";
+        
+        //create html content for current weather
+        var titleEl = document.createElement("h3")
+        titleEl.classList.add("card-title");
+        titleEl.textContent = data.name + " (" + new Date().toLocaleDateString() + ")";
+        var cardEl = document.createElement("div");
+        cardEl.classList.add("card");
+        var windEl = document.createElement("p");
+        windEl.classList.add("card-text");
+        var humidEl = document.createElement("p");
+        humidEl.classList.add("card-text");
+        var tempEl = document.createElement("p");
+        tempEl.classList.add("card-text");
+        humidEl.textContent = "Humidity: " + data.main.humidity + " %";
+        tempEl.textContent = "Temperature: " + data.main.temp + " °F";
+        var cardBodyEl = document.createElement("div");
+        cardBodyEl.classList.add("card-body");
+        var imgEl = document.createElement("img");
+        imgEl.setAttribute("src", "http://openweathermap.org/img/w/" + data.weather.icon);
 
-    if (cityname) {
-        getWeatherData(cityname);
-        cityNameInputEl.value = "";
-    } else {
-        alert("Please enter a city name")
+        titleEl.appendChild(imgEl)
+        cardBodyEl.appendChild(titleEl);
+        cardBodyEl.appendChild(tempEl);
+        cardBodyEl.appendChild(humidEl);
+        cardBodyEl.appendChild(windEl);
+        cardEl.appendChild(cardBodyEl);
+        todayEl.appendChild(cardEl);
+
+        getForecast(cityName);
+        getUVIndex(data.coord.lat, data.coord.lon);
     }
-};
-
-userFormEl.addEventListener("submit", formSubmitHandler);
-
-var displayWeather = function(weather, searchTerm) {
-    //clear old content
-    weatherContainerEl.textContent = "";
-    citySearchTerm.textContent = searchTerm;
-
-    //loop over weather data
-    for (var i = 0; i < weather.length; i++) {
-        //format repo name**? not sure how this will apply to the weather
-        var weatherName = weather[i].weather.description;
-    }
-
-    //create a container for each weather item
-    var weatherEl = document.createElement("div");
-    weatherEl.classList = "list-item flex-row justify-space-between align-center";
-
-    //create a span element to hold weather item title
-    var titleEl = document.createElement("span");
-    titleEl.textContent = weatherName
-
-    //append to container
-    weatherEl.appendChild(titleEl);
-
-    //append container to the dom
-    weatherContainerEl.appendChild(weatherEl);
-};
+)}
+  
