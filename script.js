@@ -59,12 +59,12 @@ var getWeatherData = function(cityname) {
         cardEl.appendChild(cardBodyEl);
         todayEl.appendChild(cardEl);
 
-        getForecast(cityName);
+        getForecast(cityname);
         getUVIndex(data.coord.lat, data.coord.lon);
     }
 )}
 
-function getForecast(cityName) {
+function getForecast(cityname) {
     fetch("https://api.openweathermap.org/data/2.5/forecast?q=" + cityname + "&appid=ed3ceecb82da99a626e9f6aef02e2dbb&units=imperial")
     .then(function(response) {
         return response.json();
@@ -73,6 +73,7 @@ function getForecast(cityName) {
         console.log(data)
         var forecastEl = document.querySelector("#forecast");
         forecastEl.innerHTML = "<h4 class=\"mt-3\">5-Day Forecast:</h4>";
+        forecastRowEl = document.createElement("div");
         forecastRowEl.className = "\"row\"";
 
         //loop over all forecasts in 3-hour increments
@@ -98,7 +99,7 @@ function getForecast(cityName) {
                 titleEl.classList.add("card-title");
                 titleEl.textContent = new Date(data.list[i].dt_txt).toLocaleDateString()
                 var imgEl = document.createElement("img")
-                imgEl.setAttribute("src", "http://openweathermap.org.img/w/" + data.list[i].weather[0].icon + ".png" )
+                imgEl.setAttribute("src", "http://openweathermap.org/img/w/" + data.list[i].weather[0].icon + ".png" )
                 var p1El = document.createElement("p");
                 p1El.classList.add("card-text");
                 p1El.textContent = "Temp: " + data.list[i].main.temp_max + " °F";
@@ -149,5 +150,8 @@ function getUVIndex(lat, lon) {
     })
 }
 
-document.querySelector("#search-button").addEventListener("click", getCityName);
+document.querySelector("#search-button").addEventListener("click", function(e) {
+    e.preventDefault()
+    getCityName();
+});
     
