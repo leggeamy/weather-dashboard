@@ -86,7 +86,7 @@ function getForecast(cityname) {
                 var colEl = document.createElement("div");
                 colEl.classList.add("col-md-2");
                 var cardEl = document.createElement("div");
-                cardEl.classList.add("card", "bg-primary", "text-white");
+                cardEl.classList.add("card", "bg-dark", "text-white");
                 var windEl = document.createElement("p");
                 windEl.classList.add("card-text");
                 windEl.textContent = "Wind Speed: " + data.list[i].wind.speed + " MPH";
